@@ -9,7 +9,7 @@ function errorPage (err) {
   $('#error').fadeIn(fadeSpeed)
 }
 
-async function post(url, data, returnText = false) {
+async function post(url, data, returnJSON = false) {
   // Posts data (an object) in JSON format to URL and returns JSON or text
   let response = await fetch (url, {
     method: "post",
@@ -18,10 +18,10 @@ async function post(url, data, returnText = false) {
     },
     body: JSON.stringify(data)
   })
-  if (returnText === true) {
-    return response.text()
-  } else {
+  if (returnJSON === true) {
     return response.json()
+  } else {
+    return response.text()
   }
 }
 $(document).ready(() => {
@@ -35,8 +35,7 @@ $(document).ready(() => {
       $('.page').hide()
       $('#loader').fadeIn(fadeSpeed)
       let data = $('form').serializeObject()
-      let response = await post("/submit/competitorInfo", data, true)
-      console.log(response)
+      let response = await post("/submit/competitorInfo", data)
       $('.page').hide()
       if (response == 'registered') {
         $('#alreadyRegisteredPage').fadeIn(fadeSpeed)
@@ -158,7 +157,7 @@ $(document).ready(() => {
         regInfo: regInfo,
         payment: {token: "test token"}
       }
-      let response = await post('/submit/charge', data)
+      let response = await post('/submit/charge', data, true)
       completed = true
       if (response.status == 'success') {
         $('.page').hide()
