@@ -1,0 +1,212 @@
+extends header
+
+block content
+  #incompatibilityNotice
+    p
+      | Your browser is not compatible with this website. Please use the latest
+      | version of Google Chrome, instead.
+  #loader.page
+  #competitorInfoPage.page
+    h2 Competitor information
+    br
+    form#competitorInfoForm
+      .form-group
+        label(for = 'name') Full name
+        input.form-control#name(type = 'text', placeholder = 'Name', name = 'name', required)
+      .form-group
+        label(for = 'email') Email address (the same one you use for your WCA account)
+        input.form-control#email(type = 'email', placeholder = 'Email', name = 'email', required)
+      br
+
+      label(for = 'shakerStudentGroup') 
+        | The base registration fee is $5. The registration fee will be
+        | waived for all Shaker students. Please select your registration type:
+      .form-group.radio-indent#shakerStudentGroup
+        +radioInput('isNotShakerStudent', 'isShakerStudent', 'false',
+          'Full price registration ($5.00)')
+        +radioInput('isShakerStudent', 'isShakerStudent', 'true',
+          'Free registration for Shaker students (must show Shaker student ID \
+           at competition check in)')
+      .form-group
+        .row
+          .col-md-9
+          .col-md-3
+            button.btn.btn-block.btn-lg.btn-primary(type = 'submit') Next #[i.fas.fa-arrow-right]
+  
+  #lunchPage.page
+    h2 Lunch Pre-order
+    p.lead
+      | We will be serving pizza lunch at our competition. If you want to have
+      | pizza, we recommend that you pre-order because we will only have a
+      | limited amount of lunch for sale at the competition. Also, pre-ordering
+      | is cheaper.
+    form#lunchForm
+      .form-group
+        .card
+          .card-body
+            .row
+              .col-lg-8.align-vertical-middle
+                h4.card-title Normal lunch
+                label(for = 'normalLunch')
+                  | #[strong Includes:] 2 slices of pizza, a soft drink, and a bag
+                  | of chips.
+                  br
+                  | #[strong Pre-order price:] $3.00
+                  br
+                  | #[strong Price at competition:] $5.00*
+              .col-lg-4.align-vertical-middle
+                +fiveNumberSelect('normalLunch', 'Amount of Normal Lunches')
+            
+      
+      .form-group
+        .card
+          .card-body
+            .row
+              .col-lg-8.align-vertical-middle
+                h4.card-title Large lunch
+                label(for = 'largeLunch')
+                  | #[strong Includes:] 4 slices of pizza, a soft drink, and a bag
+                  | of chips.
+                  br
+                  | #[strong Pre-order price:] $5.00
+                  br
+                  | Not available for purchase at the competition
+              .col-lg-4.align-vertical-middle
+                +fiveNumberSelect('largeLunch', 'Amount of Large Lunches')
+      p.small *This price is only an estimate and is subject to change
+      .form-group
+        .row
+          .col-md-3
+            button#lunchBack.btn.btn-block.btn-lg.btn-secondary(type = 'button') #[i.fas.fa-arrow-left] Back
+            br
+          .col-md-6
+          .col-md-3
+            button.btn.btn-block.btn-lg.btn-primary(type = 'submit') Next #[i.fas.fa-arrow-right]
+          
+  #tshirtPage.page
+    h2 T-Shirt Preorder
+    p
+      | This is the design of our official competition t-shirt:
+    .row
+      .col-md-3
+      .col-md-6
+        img.img-fluid(src = '/images/tshirt.jpg', alt = 'T-Shirt Design')
+    br
+    p.lead
+      | If you would like a shirt, you should pre-order it now. Supply of shirts
+      | for purchase at the competition will be extremely limited!
+    form#tshirtForm
+      .card
+        .card-body
+          .row
+            .col-lg-6.align-vertical-middle
+              h4.card-title Official t-shirt
+              p
+                | #[strong Pre-order price:] $18.00
+                br
+                | #[strong Price at competition:] $25.00*
+            .col-lg-6.align-vertical-middle
+              label(for = 'tshirt')
+                | What size of t-shirt would you like to pre-order?
+              .form-group#tshirt
+                .radio-indent
+                  +radioInput('tshirt-s', 'tshirt', 'S', 'Adult size S')
+                  +radioInput('tshirt-m', 'tshirt', 'M', 'Adult size M')
+                  +radioInput('tshirt-l', 'tshirt', 'L', 'Adult size L')
+                  +radioInput('tshirt-xl', 'tshirt', 'XL', 'Adult size XL')
+                  +radioInput('tshirt-no', 'tshirt', '-',
+                    'I would not like to pre-order a t-shirt')              
+      br
+      p.small *This price is only an estimate and is subject to change
+      .form-group
+        .row
+          .col-md-3
+            button#tshirtBack.btn.btn-block.btn-lg.btn-secondary(type = 'button') #[i.fas.fa-arrow-left] Back
+            br
+          .col-md-6
+          .col-md-3
+            button.btn.btn-block.btn-lg.btn-primary(type = 'submit') Next #[i.fas.fa-arrow-right]
+            
+  #confirmPage.page
+    h2 Order Summary and Payment
+    | #[strong Competitor information: ] Full name: #[span#nameConfirmation];
+    | Email: #[span#emailConfirmation]
+    br
+    br
+    table.table
+      thead
+        tr
+          th Item
+          th Quantity
+          th Price
+      tbody#confirmTableBody
+        
+    .text-center
+      p.lead Your total is $#[span#totalPrice].00
+      
+      
+    #paymentSection
+      .row
+        .col-md-4
+        .col-md-4
+          button.btn.btn-lg.btn-block#stripePlaceholder
+            | #[i.fas.fa-check] Stripe Placeholder
+          br.
+      
+              
+    #noPaymentConfirmSection
+      .row
+        .col-md-4
+        .col-md-4
+          button.btn.btn-lg.btn-block.btn-success#noPaymentConfirmButton
+            | #[i.fas.fa-check] Confirm Registration
+            
+      
+    .row
+      .col-md-3
+        button#confirmBack.btn.btn-block.btn-lg.btn-secondary(type = 'button') #[i.fas.fa-arrow-left] Back
+        
+  #submitted.page
+    h2 Thank you!
+    p.lead
+      | Your registration has been successfully processed.
+  
+  #error.page
+    h2 Uh, oh!
+    p An error occured:
+    pre#errorMessage
+    p
+      | Please email us at #{email} for assistance. Do not resubmit your
+      | payment, as you may be charged twice.
+    
+          
+    
+  #alreadyRegisteredPage.page
+    h2 You have already filled out this form and paid!
+    br
+    p
+      | Please ensure that you have also completed the registration form, located
+      | at our competition's page on the WCA website.
+    p
+      | If you would like to make any changes to your registration, please email
+      | us at #{ email }.
+    br
+    .row
+      .col-md-2
+        button#alreadyRegisteredBack.btn.btn-block.btn-secondary #[i.fas.fa-arrow-left] Back
+        
+mixin fiveNumberSelect(name, prompt)
+  select.custom-select(name = name, id = name, required)
+    option(selected, value = '') #{prompt}
+    option(value = '0') 0
+    option(value = '1') 1
+    option(value = '2') 2
+    option(value = '3') 3
+    option(value = '4') 4
+    option(value = '5') 5
+    
+mixin radioInput(id, name, value, label)
+  .custom-control.custom-radio
+    input.custom-control-input(type = 'radio', id = id, name = name,
+      value = value, required)
+    label.custom-control-label(for = id) #{label}
