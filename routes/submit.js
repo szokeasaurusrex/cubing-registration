@@ -27,7 +27,9 @@ router.post('/competitorInfo', async (req, res) => {
 router.post('/charge', async (req, res) => {
   const possibleTshirtVals = ['S', 'M', 'L', 'XL', '-']
   let totalPrice = 0
-  let regInfo = req.body
+  let requestData = req.body
+  let regInfo = requestData.regInfo
+  console.log(req.body)
   try {
     if (possibleTshirtVals.indexOf(regInfo.tshirt) < 0) {
       throw new Error('T-shirt value error')

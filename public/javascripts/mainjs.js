@@ -1,26 +1,55 @@
+'use strict';
+
+let completed = false
+
+function errorPage (err) {
+  completed = true
+  $('.page').hide()
+  $('#errorMessage').text(err.message)
+  $('#error').fadeIn(fadeSpeed)
+}
+
+async function post(url, data, returnText = false) {
+  // Posts data (an object) in JSON format to URL and returns JSON or text
+  let response = await fetch (url, {
+    method: "post",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8"
+    },
+    body: JSON.stringify(data)
+  })
+  if (returnText === true) {
+    return response.text()
+  } else {
+    return response.json()
+  }
+}
 $(document).ready(() => {
-  let completed = false;
   const fadeSpeed = 200;
 
   $('#incompatibilityNotice').hide()
   $('#competitorInfoPage').show()
-  $('#competitorInfoForm').on('submit', event => {
-    event.preventDefault()
-    $('.page').hide()
-    $('#loader').fadeIn(fadeSpeed)
-    $.post("/submit/competitorInfo", $('form').serializeObject()).done(data => {
+  $('#competitorInfoForm').on('submit', async event => {
+    try {
+      event.preventDefault()
       $('.page').hide()
-      if (data == 'registered') {
+      $('#loader').fadeIn(fadeSpeed)
+      let data = $('form').serializeObject()
+      let response = await post("/submit/competitorInfo", data, true)
+      console.log(response)
+      $('.page').hide()
+      if (response == 'registered') {
         $('#alreadyRegisteredPage').fadeIn(fadeSpeed)
         completed = true
         $('form').trigger('reset')
-      } else if (data == 'not registered'){
+      } else if (response == 'not registered') {
         $('#lunchPage').fadeIn(fadeSpeed)
       } else {
-        $('#errorMessage').text(data)
-        $('#error').fadeIn(fadeSpeed)
+        throw new Error(response)
       }
-    })
+    } catch (err) {
+      errorPage(err)
+    }
   })
 
   $('#lunchForm').on('submit', event => {
@@ -118,29 +147,28 @@ $(document).ready(() => {
     $('#competitorInfoPage').fadeIn(fadeSpeed)
   })
 
-  $('#stripePlaceholder').click( () => {
-    $('.page').hide()
-    $('#loader').fadeIn(fadeSpeed)
+  $('#stripePlaceholder').click( async () => {
+    try {
+      $('.page').hide()
+      $('#loader').fadeIn(fadeSpeed)
 
-    let data = $('form').serializeObject()
-    data.totalPrice = $('#totalPrice').text()
-    console.log(data)
-    $.post('/submit/charge', data).done(response => {
+      let regInfo = $('form').serializeObject()
+      regInfo.totalPrice = $('#totalPrice').text()
+      let data = {
+        regInfo: regInfo,
+        payment: {token: "test token"}
+      }
+      let response = await post('/submit/charge', data)
       completed = true
       if (response.status == 'success') {
         $('.page').hide()
         $('#submitted').fadeIn(fadeSpeed)
       } else {
-        $('.page').hide()
-        $('#error').show()
-        $('#errorMessage').text(response.error)
+        throw new Error(response.error)
       }
-    }).fail((xhr, status, error) => {
-      $('.page').hide()
-      $('#errorMessage').text(error.message)
-      $('#error').fadeIn(fadeSpeed)
-      console.log(error)
-    })
+    } catch (err) {
+      errorPage(err)
+    }
   })
 
   $(window).on('beforeunload', () => {
