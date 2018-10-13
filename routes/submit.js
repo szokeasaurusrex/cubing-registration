@@ -8,9 +8,9 @@ router.post('/competitorInfo', async (req, res) => {
   let db
   try {
     db = await MongoClient.connect(mongoUrl, {useNewUrlParser: true})
-    let dbo = db.db('cubing')
+    let collection = db.db('cubing').collection('registrations')
     let query = {email: req.body.email}
-    if (await dbo.collection('registrations').findOne(query) ) {
+    if (await collection.findOne(query) ) {
       res.send('registered')
     } else {
       res.send('not registered')
@@ -54,18 +54,14 @@ router.post('/charge', async (req, res) => {
       let db
       try {
         db = await MongoClient.connect(mongoUrl, {useNewUrlParser: true})
-        let dbo = db.db('cubing')
+        let collection = db.db('cubing').collection('registrations')
         let query = {email: regInfo.email}
-        if (await dbo.collection('registrations').findOne(query)) {
+        if (await collection.findOne(query)) {
           throw new Error('Email address already registered.')
         } else {
-          let response = await dbo.collection('registrations').insertOne(regInfo)
-          if (response.result.ok == 1) {
-            res.json({status: 'success', dataReceived: req.body})
-            db.close()
-          } else {
-            throw new Error("Error adding registration to database")
-          }
+          await collection.insertOne(regInfo)
+          res.json({status: 'success', dataReceived: req.body})
+          db.close()
         }
       } catch(err) {
         db.close()
