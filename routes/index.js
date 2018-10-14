@@ -1,5 +1,7 @@
 'use strict';
 
+const keyPublishable = process.env.PUBLISHABLE_KEY
+
 var express = require('express')
 var router = express.Router()
 
@@ -10,7 +12,9 @@ const mongoUrl = "mongodb://localhost:27017/cubing"
 
 /* GET home page. */
 router.get('/', (req, res) => {
-  res.render('index')
+  res.render('index', {
+    stripeKeyPublishable: keyPublishable
+  })
 })
 
 

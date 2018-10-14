@@ -1,12 +1,14 @@
 'use strict';
 
 let completed = false
+const fadeSpeed = 300;
 
 function errorPage (err) {
   completed = true
   $('.page').hide()
   $('#errorMessage').text(err.message)
   $('#error').fadeIn(fadeSpeed)
+  console.error(err)
 }
 
 async function post(url, data, returnJSON = false) {
@@ -18,15 +20,68 @@ async function post(url, data, returnJSON = false) {
     },
     body: JSON.stringify(data)
   })
+  if (!response.ok) {
+    throw response
+  }
   if (returnJSON === true) {
     return response.json()
   } else {
     return response.text()
   }
 }
-$(document).ready(() => {
-  const fadeSpeed = 200;
 
+function makeConfirmTableRow(item, quantity, unitPrice) {
+  if (quantity > 0) {
+    let priceLine = ''
+    if (quantity == 1) {
+      priceLine = `$${unitPrice}.00`
+    } else {
+      priceLine = `$${unitPrice * quantity}.00 ($${unitPrice}.00 each)`
+    }
+    let tableRow = `
+      <tr>
+        <td>${item}</td>
+        <td>${quantity}</td>
+        <td>${priceLine}</td>
+      </tr>`
+    return tableRow
+  } else {
+    return ''
+  }
+}
+
+async function submitPayment(token) {
+  try {
+    $('.page').hide()
+    $('#loader').fadeIn(fadeSpeed)
+
+    let regInfo = $('form').serializeObject()
+    regInfo.totalPrice = $('#totalPrice').text()
+    let data = {
+      regInfo: regInfo,
+      token: token
+    }
+    let response = await post('/submit/charge', data, true)
+    completed = true
+    if (response.status == 'success') {
+      $('.page').hide()
+      $('#submitted').fadeIn(fadeSpeed)
+    } else if (response.status == 'card_error') {
+      $('.page').hide()
+      $('#confirmPage').fadeIn(fadeSpeed)
+      setTimeout( () => {
+        alert('Error processing payment: ' + response.message)
+      }, fadeSpeed)
+    } else {
+      throw new Error(response.error)
+    }
+  } catch (err) {
+    errorPage(err)
+    $('#paymentResubmitWarning').show()
+  }
+}
+
+$(document).ready(() => {
   $('#incompatibilityNotice').hide()
   $('#competitorInfoPage').show()
   $('#competitorInfoForm').on('submit', async event => {
@@ -120,6 +175,7 @@ $(document).ready(() => {
 
     // Total Price
     $('#totalPrice').text(totalPrice)
+    $
     if (totalPrice > 0) {
       $('#paymentSection').show()
       $('#noPaymentConfirmSection').hide()
@@ -146,28 +202,26 @@ $(document).ready(() => {
     $('#competitorInfoPage').fadeIn(fadeSpeed)
   })
 
-  $('#stripePlaceholder').click( async () => {
-    try {
-      $('.page').hide()
-      $('#loader').fadeIn(fadeSpeed)
+  $('#stripeCheckout').click( () => {
+    let checkoutHandler = StripeCheckout.configure({
+      key: $('#stripeKey').text(),
+      locale: "auto"
+    });
+    checkoutHandler.open({
+      name: 'Shaker Fall 2018',
+      description: 'Registration fee and pre-orders',
+      zipCode: true,
+      billingAddress: true,
+      amount: $('#totalPrice').text() * 100,
+      currency: 'USD',
+      email: $('form').serializeObject().email,
+      token: submitPayment
+    })
+    // submitPayment({token: "test-token"})
+  })
 
-      let regInfo = $('form').serializeObject()
-      regInfo.totalPrice = $('#totalPrice').text()
-      let data = {
-        regInfo: regInfo,
-        payment: {token: "test token"}
-      }
-      let response = await post('/submit/charge', data, true)
-      completed = true
-      if (response.status == 'success') {
-        $('.page').hide()
-        $('#submitted').fadeIn(fadeSpeed)
-      } else {
-        throw new Error(response.error)
-      }
-    } catch (err) {
-      errorPage(err)
-    }
+  $('#noPaymentConfirmButton').click( () => {
+    submitPayment({})
   })
 
   $(window).on('beforeunload', () => {
@@ -178,24 +232,3 @@ $(document).ready(() => {
     }
   })
 })
-
-
-function makeConfirmTableRow(item, quantity, unitPrice) {
-  if (quantity > 0) {
-    let priceLine = ''
-    if (quantity == 1) {
-      priceLine = `$${unitPrice}.00`
-    } else {
-      priceLine = `$${unitPrice * quantity}.00 ($${unitPrice}.00 each)`
-    }
-    let tableRow = `
-      <tr>
-        <td>${item}</td>
-        <td>${quantity}</td>
-        <td>${priceLine}</td>
-      </tr>`
-    return tableRow
-  } else {
-    return ''
-  }
-}

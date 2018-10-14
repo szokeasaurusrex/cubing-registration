@@ -1,7 +1,7 @@
 body {
   margin-bottom: 100px;
 }
-.page {
+.page, #paymentResubmitWarning, #stripeKey {
   display: none;
 }
 

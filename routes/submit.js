@@ -1,7 +1,11 @@
 'use strict';
 
+const keyPublishable = process.env.PUBLISHABLE_KEY
+const keySecret = process.env.SECRET_KEY
+
 var express = require('express')
 var router = express.Router()
+const stripe = require("stripe")(keySecret);
 
 var MongoClient = require('mongodb').MongoClient
 const mongoUrl = "mongodb://localhost:27017/cubing"
@@ -27,12 +31,13 @@ router.post('/competitorInfo', async (req, res) => {
 // TODO: Add /initiatePayment
 
 router.post('/charge', async (req, res) => {
-  const possibleTshirtVals = ['S', 'M', 'L', 'XL', '-']
-  let totalPrice = 0
-  let requestData = req.body
-  let regInfo = requestData.regInfo
-  console.log(req.body)
   try {
+    const possibleTshirtVals = ['S', 'M', 'L', 'XL', '-']
+    let charge = {}
+    let totalPrice = 0
+    let requestData = req.body
+    let regInfo = requestData.regInfo
+    let token = requestData.token
     if (possibleTshirtVals.indexOf(regInfo.tshirt) < 0) {
       throw new Error('T-shirt value error')
     }
@@ -54,6 +59,34 @@ router.post('/charge', async (req, res) => {
       totalPrice += 18
     }
     if (totalPrice == regInfo.totalPrice) {
+      if (totalPrice > 0) {
+        try {
+          charge = await stripe.charges.create({
+            amount: totalPrice * 100,
+            currency: 'usd',
+            source: token.id,
+            description: 'Registration fee and pre-orders for Shaker Fall 2018',
+            receipt_email: regInfo.email,
+            metadata: regInfo
+          })
+          if (charge.failure_code !== null) {
+            throw new Error(charge.failure_message)
+          }
+          regInfo.chargeId = charge.id
+          regInfo.charge = charge
+        } catch (err) {
+          console.log(err)
+          if (err.type == 'StripeCardError') {
+            res.json({
+              status: 'card_error',
+              message: err.message
+            })
+            return
+          } else {
+            throw new Error("Error charging card. (Not user's fault)")
+          }
+        }
+      }
       regInfo.approved = false
       let db
       try {
@@ -77,8 +110,6 @@ router.post('/charge', async (req, res) => {
   } catch (err) {
     res.json({status: 'error', error: err.message, dataReceived: req.body})
   }
-
-
 })
 
 module.exports = router

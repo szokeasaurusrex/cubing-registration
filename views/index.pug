@@ -129,9 +129,8 @@ block content
             
   #confirmPage.page
     h2 Order Summary and Payment
-    | #[strong Competitor information: ] Full name: #[span#nameConfirmation];
-    | Email: #[span#emailConfirmation]
     br
+    
     br
     table.table
       thead
@@ -139,29 +138,39 @@ block content
           th Item
           th Quantity
           th Price
-      tbody#confirmTableBody
-        
-    .text-center
-      p.lead Your total is $#[span#totalPrice].00
-      
-      
-    #paymentSection
-      .row
-        .col-md-4
-        .col-md-4
-          button.btn.btn-lg.btn-block#stripePlaceholder
-            | #[i.fas.fa-check] Stripe Placeholder
-          br.
-      
-              
-    #noPaymentConfirmSection
-      .row
-        .col-md-4
-        .col-md-4
-          button.btn.btn-lg.btn-block.btn-success#noPaymentConfirmButton
-            | #[i.fas.fa-check] Confirm Registration
-            
-      
+      tbody#confirmTableBody  
+    //- .text-center
+    //-   p.lead Your total is $#[span#totalPrice].00
+    .card
+      .card-body
+        h4.card-title Payment
+        .row
+          .col-lg-8.align-vertical-middle
+            h6 Please check that this information is correct:
+            ul
+              li Full name: #[span#nameConfirmation]
+              li Email: #[span#emailConfirmation]
+          .col-lg-4.align-vertical-middle
+            #paymentSection.align-vertical-middle
+              button.btn.btn-lg.btn-block.btn-success#stripeCheckout
+                | #[i.fas.fa-check] Confirm and pay $#[span#totalPrice].00
+            #noPaymentConfirmSection
+              button.btn.btn-lg.btn-block.btn-success#noPaymentConfirmButton
+                | #[i.fas.fa-check] Confirm registration
+    br
+    p.small
+      | Cancellation and refund policy:
+      br
+      | If you would like to cancel your registration, please email us at 
+      | #{email}. As long as we recieve your cancellation request before
+      | 11:59 PM (EST) on the registration deadline, we will refund your
+      | lunch and t-shirt pre-order. The $5.00 registration fee will not be
+      | refunded. We will not issue any refunds unless you cancel your
+      | entire registration, and no refunds will be issued for cancellation
+      | requests received after 11:59 PM (EST) on the registration deadline.
+      | Please note: it will take approximately 10 to 15 buisness days to
+      | process your refund.
+    br
     .row
       .col-md-3
         button#confirmBack.btn.btn-block.btn-lg.btn-secondary(type = 'button') #[i.fas.fa-arrow-left] Back
@@ -175,9 +184,10 @@ block content
     h2 Uh, oh!
     p An error occured:
     pre#errorMessage
+    p#paymentResubmitWarning
+      | Do not resubmit your payment as you may be charged twice.
     p
-      | Please email us at #{email} for assistance. Do not resubmit your
-      | payment, as you may be charged twice.
+      | Please email us at #{email} for assistance. 
     
           
     
@@ -194,6 +204,8 @@ block content
     .row
       .col-md-2
         button#alreadyRegisteredBack.btn.btn-block.btn-secondary #[i.fas.fa-arrow-left] Back
+        
+  #stripeKey= stripeKeyPublishable
         
 mixin fiveNumberSelect(name, prompt)
   select.custom-select(name = name, id = name, required)
