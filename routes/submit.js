@@ -87,6 +87,7 @@ router.post('/charge', async (req, res) => {
           }
         }
       }
+      regInfo.date = new Date()
       regInfo.approved = false
       let db
       try {
