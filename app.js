@@ -31,9 +31,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json())
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/submit', submitRouter)
+app.use('/registration', indexRouter);
+app.use('/registration/users', usersRouter);
+app.use('/registration/submit', submitRouter)
 
 
 
