@@ -5,6 +5,7 @@ const fadeSpeed = 300;
 
 function errorPage (err) {
   completed = true
+  window.scrollTo(0, 0)
   $('.page').hide()
   $('#errorMessage').text(err.message)
   $('#error').fadeIn(fadeSpeed)
@@ -52,6 +53,7 @@ function makeConfirmTableRow(item, quantity, unitPrice) {
 
 async function submitPayment(token) {
   try {
+    window.scrollTo(0, 0)
     $('.page').hide()
     $('#loader').fadeIn(fadeSpeed)
 
@@ -64,9 +66,11 @@ async function submitPayment(token) {
     let response = await post('/submit/charge', data, true)
     completed = true
     if (response.status == 'success') {
+      window.scrollTo(0, 0)
       $('.page').hide()
       $('#submitted').fadeIn(fadeSpeed)
     } else if (response.status == 'card_error') {
+      window.scrollTo(0, 0)
       $('.page').hide()
       $('#confirmPage').fadeIn(fadeSpeed)
       setTimeout( () => {
@@ -87,11 +91,13 @@ $(document).ready(() => {
   $('#competitorInfoForm').on('submit', async event => {
     try {
       event.preventDefault()
+      window.scrollTo(0, 0)
       $('.page').hide()
       $('#loader').fadeIn(fadeSpeed)
       let data = $('form').serializeObject()
       let response = await post("/submit/competitorInfo", data)
       $('.page').hide()
+      window.scrollTo(0, 0)
       if (response == 'registered') {
         $('#alreadyRegisteredPage').fadeIn(fadeSpeed)
         completed = true
@@ -108,11 +114,13 @@ $(document).ready(() => {
 
   $('#lunchForm').on('submit', event => {
     event.preventDefault()
+    window.scrollTo(0, 0)
     $('.page').hide()
     $('#tshirtPage').fadeIn(fadeSpeed)
   })
 
   $('#lunchBack').click( () => {
+    window.scrollTo(0, 0)
     $('.page').hide()
     $('#competitorInfoPage').fadeIn(fadeSpeed)
   })
@@ -128,6 +136,7 @@ $(document).ready(() => {
     event.preventDefault()
 
     // Load confirm page
+    window.scrollTo(0, 0)
     $('.page').hide()
     $('#confirmPage').fadeIn(fadeSpeed)
 
@@ -187,17 +196,20 @@ $(document).ready(() => {
   })
 
   $('#tshirtBack').click( () => {
+    window.scrollTo(0, 0)
     $('.page').hide()
     $('#lunchPage').fadeIn(fadeSpeed)
   })
 
   $('#confirmBack').click( () => {
+    window.scrollTo(0, 0)
     $('.page').hide()
     $('#tshirtPage').fadeIn(fadeSpeed)
   })
 
   $('#alreadyRegisteredBack').click( () => {
     completed = false
+    window.scrollTo(0, 0)
     $('.page').hide()
     $('#competitorInfoPage').fadeIn(fadeSpeed)
   })
