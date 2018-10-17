@@ -74,8 +74,8 @@ block content
           .card-body
             .row
               .col-lg-8.align-vertical-middle
-                h4.card-title Normal lunch
-                label(for = 'normalLunch')
+                h4.card-title Large lunch
+                label(for = 'largeLunch')
                   | #[strong Includes:] 4 slices of pizza, a soft drink, and a bag
                   | of chips.
                   br
@@ -83,7 +83,7 @@ block content
                   br
                   | Not available for purchase at the competition
               .col-lg-4.align-vertical-middle
-                +fiveNumberSelect('normalLunch', 'Amount of Normal Lunches', false)
+                +fiveNumberSelect('largeLunch', 'Amount of Large Lunches', false)
       
       .form-group
         .card
