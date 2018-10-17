@@ -14,8 +14,22 @@ const mongoUrl = "mongodb://localhost:27017/cubing"
 /* GET home page. */
 router.get('/', (req, res) => {
   if (new Date() < deadline) {
+    let deadlineString = ''
+    const displayDeadline = new Date(deadline.getTime() - 1)
+    deadlineString += displayDeadline.toLocaleString('en-us', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+    deadlineString += ' at '
+    deadlineString += displayDeadline.toLocaleString('en-us', {
+      hour: 'numeric',
+      minute: 'numeric'
+    })
     res.render('index', {
-      stripeKeyPublishable: keyPublishable
+      stripeKeyPublishable: keyPublishable,
+      deadline: deadlineString
     })
   } else {
     res.render('deadlinePassed')
