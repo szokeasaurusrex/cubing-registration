@@ -93,29 +93,30 @@ $(document).ready(() => {
     completed = false
     $('.page').hide()
     $('#competitorInfoPage').fadeIn(fadeSpeed)
-    $('#competitorInfoForm').on('submit', async event => {
-      try {
-        event.preventDefault()
-        window.scrollTo(0, 0)
-        $('.page').hide()
-        $('#loader').fadeIn(fadeSpeed)
-        let data = $('form').serializeObject()
-        let response = await post("/submit/competitorInfo", data)
-        $('.page').hide()
-        window.scrollTo(0, 0)
-        if (response == 'registered') {
-          $('#alreadyRegisteredPage').fadeIn(fadeSpeed)
-          completed = true
-          $('form').trigger('reset')
-        } else if (response == 'not registered') {
-          $('#lunchPage').fadeIn(fadeSpeed)
-        } else {
-          throw new Error(response)
-        }
-      } catch (err) {
-        errorPage(err)
+  })
+
+  $('#competitorInfoForm').on('submit', async event => {
+    try {
+      event.preventDefault()
+      window.scrollTo(0, 0)
+      $('.page').hide()
+      $('#loader').fadeIn(fadeSpeed)
+      let data = $('form').serializeObject()
+      let response = await post("/submit/competitorInfo", data)
+      $('.page').hide()
+      window.scrollTo(0, 0)
+      if (response == 'registered') {
+        $('#alreadyRegisteredPage').fadeIn(fadeSpeed)
+        completed = true
+        $('form').trigger('reset')
+      } else if (response == 'not registered') {
+        $('#lunchPage').fadeIn(fadeSpeed)
+      } else {
+        throw new Error(response)
       }
-    })
+    } catch (err) {
+      errorPage(err)
+    }
   })
 
   $('#competitorInfoBack').click( () => {
