@@ -1,6 +1,7 @@
 'use strict';
 
 const keyPublishable = process.env.PUBLISHABLE_KEY
+const deadline = new Date(Date.UTC(2018, 10, 22, 5))
 
 var express = require('express')
 var router = express.Router()
@@ -12,9 +13,13 @@ const mongoUrl = "mongodb://localhost:27017/cubing"
 
 /* GET home page. */
 router.get('/', (req, res) => {
-  res.render('index', {
-    stripeKeyPublishable: keyPublishable
-  })
+  if (new Date() < deadline) {
+    res.render('index', {
+      stripeKeyPublishable: keyPublishable
+    })
+  } else {
+    res.render('deadlinePassed')
+  }
 })
 
 

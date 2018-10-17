@@ -2,6 +2,7 @@
 
 const keyPublishable = process.env.PUBLISHABLE_KEY
 const keySecret = process.env.SECRET_KEY
+const deadline = new Date(Date.UTC(2018, 10, 22, 5))
 
 var express = require('express')
 var router = express.Router()
@@ -13,6 +14,9 @@ const mongoUrl = "mongodb://localhost:27017/cubing"
 router.post('/competitorInfo', async (req, res) => {
   let db
   try {
+    if (new Date() > deadline) {
+      throw new Error('The registration deadline has passed.')
+    }
     db = await MongoClient.connect(mongoUrl, {useNewUrlParser: true})
     let collection = db.db('cubing').collection('registrations')
     let query = {email: req.body.email}
@@ -32,6 +36,9 @@ router.post('/competitorInfo', async (req, res) => {
 
 router.post('/charge', async (req, res) => {
   try {
+    if (new Date() > deadline) {
+      throw new Error('The registration deadline has passed.')
+    }
     const possibleTshirtVals = ['S', 'M', 'L', 'XL', '-']
     let charge = {}
     let totalPrice = 0
