@@ -37,9 +37,9 @@ block content
     h2 Lunch Pre-order
     p.lead
       | We will be serving pizza lunch at our competition. If you want to have
-      | pizza, we recommend that you pre-order because we will only have a
-      | limited amount of lunch for sale at the competition. Also, pre-ordering
-      | is cheaper.
+      | pizza, we recommend that you pre-order. We will only have small lunches
+      | available for sale at the competition, and the supply will be extremely
+      | limited.
     form#lunchForm
       .form-group
         .card
@@ -48,23 +48,6 @@ block content
               .col-lg-8.align-vertical-middle
                 h4.card-title Normal lunch
                 label(for = 'normalLunch')
-                  | #[strong Includes:] 2 slices of pizza, a soft drink, and a bag
-                  | of chips.
-                  br
-                  | #[strong Pre-order price:] $3.00
-                  br
-                  | #[strong Price at competition:] $5.00*
-              .col-lg-4.align-vertical-middle
-                +fiveNumberSelect('normalLunch', 'Amount of Normal Lunches')
-            
-      
-      .form-group
-        .card
-          .card-body
-            .row
-              .col-lg-8.align-vertical-middle
-                h4.card-title Large lunch
-                label(for = 'largeLunch')
                   | #[strong Includes:] 4 slices of pizza, a soft drink, and a bag
                   | of chips.
                   br
@@ -72,7 +55,24 @@ block content
                   br
                   | Not available for purchase at the competition
               .col-lg-4.align-vertical-middle
-                +fiveNumberSelect('largeLunch', 'Amount of Large Lunches')
+                +fiveNumberSelect('smallLunch', 'Amount of Small Lunches', false)
+      
+      .form-group
+        .card
+          .card-body
+            .row
+              .col-lg-8.align-vertical-middle
+                h4.card-title Small lunch
+                label(for = 'smallLunch')
+                  | #[strong Includes:] 2 slices of pizza, a soft drink, and a bag
+                  | of chips.
+                  br
+                  | #[strong Pre-order price:] $3.00
+                  br
+                  | #[strong Price at competition:] $5.00*
+              .col-lg-4.align-vertical-middle
+                +fiveNumberSelect('smallLunch', 'Amount of Small Lunches', true)
+          
       p.small *This price is only an estimate and is subject to change
       .form-group
         .row
@@ -207,9 +207,9 @@ block content
         
   #stripeKey= stripeKeyPublishable
         
-mixin fiveNumberSelect(name, prompt)
+mixin fiveNumberSelect(name, prompt, addValToDefault)
   select.custom-select(name = name, id = name, required)
-    option(selected, value = '') #{prompt}
+    option(selected, value = addValToDefault ? '0' : '') #{prompt}
     option(value = '0') 0
     option(value = '1') 1
     option(value = '2') 2

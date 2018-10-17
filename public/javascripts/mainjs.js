@@ -127,8 +127,8 @@ $(document).ready(() => {
 
   $('#tshirtForm').on('submit', event => {
     const fullPriceRegistration = 5
-    const normalLunchUnitPrice = 3
-    const largeLunchUnitPrice = 5
+    const normalLunchUnitPrice = 5
+    const smallLunchUnitPrice = 3
     const tshirtUnitPrice = 18
 
     let totalPrice = 0
@@ -166,11 +166,11 @@ $(document).ready(() => {
       'Normal lunch', normalLunchQunatity, normalLunchUnitPrice
     ))
 
-    // Large lunch
-    let largeLunchQunatity = form.largeLunch
-    totalPrice += largeLunchQunatity * largeLunchUnitPrice
+    // Small lunch
+    let smallLunchQunatity = form.smallLunch
+    totalPrice += smallLunchQunatity * smallLunchUnitPrice
     $('#confirmTableBody').append(makeConfirmTableRow(
-      'Large lunch', largeLunchQunatity, largeLunchUnitPrice
+      'Small lunch', smallLunchQunatity, smallLunchUnitPrice
     ))
 
     // T-shirt

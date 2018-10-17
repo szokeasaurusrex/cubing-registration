@@ -42,19 +42,19 @@ router.post('/charge', async (req, res) => {
       throw new Error('T-shirt value error')
     }
     if (isNaN(regInfo.normalLunch) ||
-        isNaN(regInfo.largeLunch) ||
+        isNaN(regInfo.smallLunch) ||
         isNaN(regInfo.totalPrice)) {
           throw new Error('Number value error')
     }
     regInfo.normalLunch = parseInt(regInfo.normalLunch)
-    regInfo.largeLunch = parseInt(regInfo.largeLunch)
+    regInfo.smallLunch = parseInt(regInfo.smallLunch)
     regInfo.totalPrice = parseInt(regInfo.totalPrice)
     regInfo.isShakerStudent = (regInfo.isShakerStudent === "true")
     if (regInfo.isShakerStudent == false) {
       totalPrice += 5
     }
-    totalPrice += 3 * regInfo.normalLunch
-    totalPrice += 5 * regInfo.largeLunch
+    totalPrice += 5 * regInfo.normalLunch
+    totalPrice += 3 * regInfo.smallLunch
     if (regInfo.tshirt != "-") {
       totalPrice += 18
     }
