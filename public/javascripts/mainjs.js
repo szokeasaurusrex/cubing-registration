@@ -117,6 +117,11 @@ $(document).ready(() => {
     })
   })
 
+  $('#competitorInfoBack').click( () => {
+    $('.page').hide()
+    $('#introPage').fadeIn(fadeSpeed)
+  })
+
   $('#lunchForm').on('submit', event => {
     event.preventDefault()
     window.scrollTo(0, 0)
