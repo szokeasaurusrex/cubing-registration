@@ -17,6 +17,7 @@ router.get('/', (req, res) => {
     let deadlineString = ''
     const displayDeadline = new Date(deadline.getTime() - 1)
     deadlineString += displayDeadline.toLocaleString('en-us', {
+      timeZone: 'America/New_York',
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -24,8 +25,10 @@ router.get('/', (req, res) => {
     })
     deadlineString += ' at '
     deadlineString += displayDeadline.toLocaleString('en-us', {
+      timeZone: 'America/New_York'
       hour: 'numeric',
-      minute: 'numeric'
+      minute: 'numeric',
+      timeZoneName: 'short'
     })
     res.render('index', {
       stripeKeyPublishable: keyPublishable,
