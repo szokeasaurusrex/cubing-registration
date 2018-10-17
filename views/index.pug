@@ -83,7 +83,7 @@ block content
                   br
                   | Not available for purchase at the competition
               .col-lg-4.align-vertical-middle
-                +fiveNumberSelect('largeLunch', 'Amount of Large Lunches', false)
+                +fiveNumberSelect('largeLunch', 'Amount of Large Lunches')
       
       .form-group
         .card
@@ -99,7 +99,7 @@ block content
                   br
                   | #[strong Price at competition:] $5.00*
               .col-lg-4.align-vertical-middle
-                +fiveNumberSelect('smallLunch', 'Amount of Small Lunches', true)
+                +fiveNumberSelect('smallLunch', 'Amount of Small Lunches')
           
       p.small *This price is only an estimate and is subject to change
       .form-group
@@ -235,9 +235,9 @@ block content
         
   #stripeKey= stripeKeyPublishable
         
-mixin fiveNumberSelect(name, prompt, addValToDefault)
+mixin fiveNumberSelect(name, prompt)
   select.custom-select(name = name, id = name, required)
-    option(selected, value = addValToDefault ? '0' : '') #{prompt}
+    option(selected, value = '') #{prompt}
     option(value = '0') 0
     option(value = '1') 1
     option(value = '2') 2
