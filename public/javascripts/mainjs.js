@@ -90,6 +90,7 @@ $(document).ready(() => {
   $('#introPage').fadeIn(fadeSpeed)
 
   $('#completeRegistrationButton').click( () => {
+    completed = false
     $('.page').hide()
     $('#competitorInfoPage').fadeIn(fadeSpeed)
     $('#competitorInfoForm').on('submit', async event => {
