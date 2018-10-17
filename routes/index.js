@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
     })
     deadlineString += ' at '
     deadlineString += displayDeadline.toLocaleString('en-us', {
-      timeZone: 'America/New_York'
+      timeZone: 'America/New_York',
       hour: 'numeric',
       minute: 'numeric',
       timeZoneName: 'short'
