@@ -1,6 +1,6 @@
 'use strict';
 
-let completed = false
+let completed = true
 const fadeSpeed = 300;
 
 function errorPage (err) {
@@ -87,29 +87,34 @@ async function submitPayment(token) {
 
 $(document).ready(() => {
   $('#incompatibilityNotice').hide()
-  $('#competitorInfoPage').show()
-  $('#competitorInfoForm').on('submit', async event => {
-    try {
-      event.preventDefault()
-      window.scrollTo(0, 0)
-      $('.page').hide()
-      $('#loader').fadeIn(fadeSpeed)
-      let data = $('form').serializeObject()
-      let response = await post("/submit/competitorInfo", data)
-      $('.page').hide()
-      window.scrollTo(0, 0)
-      if (response == 'registered') {
-        $('#alreadyRegisteredPage').fadeIn(fadeSpeed)
-        completed = true
-        $('form').trigger('reset')
-      } else if (response == 'not registered') {
-        $('#lunchPage').fadeIn(fadeSpeed)
-      } else {
-        throw new Error(response)
+  $('#introPage').fadeIn(fadeSpeed)
+
+  $('#completeRegistrationButton').click( () => {
+    $('.page').hide()
+    $('#competitorInfoPage').fadeIn(fadeSpeed)
+    $('#competitorInfoForm').on('submit', async event => {
+      try {
+        event.preventDefault()
+        window.scrollTo(0, 0)
+        $('.page').hide()
+        $('#loader').fadeIn(fadeSpeed)
+        let data = $('form').serializeObject()
+        let response = await post("/submit/competitorInfo", data)
+        $('.page').hide()
+        window.scrollTo(0, 0)
+        if (response == 'registered') {
+          $('#alreadyRegisteredPage').fadeIn(fadeSpeed)
+          completed = true
+          $('form').trigger('reset')
+        } else if (response == 'not registered') {
+          $('#lunchPage').fadeIn(fadeSpeed)
+        } else {
+          throw new Error(response)
+        }
+      } catch (err) {
+        errorPage(err)
       }
-    } catch (err) {
-      errorPage(err)
-    }
+    })
   })
 
   $('#lunchForm').on('submit', event => {

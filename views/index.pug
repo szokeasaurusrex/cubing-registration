@@ -6,6 +6,30 @@ block content
       | Your browser is not compatible with this website. Please use the latest
       | version of Google Chrome, instead.
   #loader.page
+  #introPage.page
+    p.lead
+      | Welcome to the official website of the Shaker Fall 2018 Speedcubing
+      | Competition!
+    p
+      | We are very excited for the upcoming competition, which will be taking
+      | place on December 2, 2018 at the Shaker Heights High School in Shaker
+      | Heights, Ohio. This year, in an effort to make speedcubing competitions
+      | as accessible as possible, we have lowered our registration fee to $5
+      | (USD). Additionally, we are making it easier than ever to pre-order a
+      | t-shirt, integrating t-shirt pre-orders directly into our registration
+      | site.
+    p
+      | If you would like to register for this competition, please first make
+      | sure that you are registered on our WCA page (TODO: INSERT URL). Then,
+      | click the "Complete registration" button below, fill out the form, and
+      | pay. While filling out the form, please do not refresh the page or use
+      | your browser's back button as you will lose all your form progress.
+      | Instead, use the back buttons located at the bottom of each page.
+    .row
+      .col-md-4
+      .col-md-4
+        button.btn.btn-block.btn-lg.btn-primary#completeRegistrationButton
+         | Complete registration #[i.fas.fa-arrow-right]
   #competitorInfoPage.page
     h2 Competitor information
     br
@@ -29,7 +53,10 @@ block content
            at competition check in)')
       .form-group
         .row
-          .col-md-9
+          .col-md-3
+            button.btn.btn-block.btn-lg.btn-secondary#competitorInfoBack(type = 'button')
+              | #[ i.fas.fa-arrow-left ] Back
+          .col-md-6
           .col-md-3
             button.btn.btn-block.btn-lg.btn-primary(type = 'submit') Next #[i.fas.fa-arrow-right]
   
