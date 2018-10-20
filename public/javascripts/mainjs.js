@@ -1,15 +1,19 @@
 'use strict';
 
 let completed = true
-const fadeSpeed = 300;
+const fadeSpeed = 300
 
 function errorPage (err) {
   completed = true
+  $('#errorMessage').text(err.message)
+  flipTo('error')
+  console.error(err)
+}
+
+function flipTo(pageId) {
   window.scrollTo(0, 0)
   $('.page').hide()
-  $('#errorMessage').text(err.message)
-  $('#error').fadeIn(fadeSpeed)
-  console.error(err)
+  $('#' + pageId).fadeIn(fadeSpeed)
 }
 
 async function post(url, data, returnJSON = false) {
@@ -53,9 +57,7 @@ function makeConfirmTableRow(item, quantity, unitPrice) {
 
 async function submitPayment(token) {
   try {
-    window.scrollTo(0, 0)
-    $('.page').hide()
-    $('#loader').fadeIn(fadeSpeed)
+    flipTo('loader')
 
     let regInfo = $('form').serializeObject()
     regInfo.totalPrice = $('#totalPrice').text()
@@ -66,13 +68,9 @@ async function submitPayment(token) {
     let response = await post('/submit/charge', data, true)
     completed = true
     if (response.status == 'success') {
-      window.scrollTo(0, 0)
-      $('.page').hide()
-      $('#submitted').fadeIn(fadeSpeed)
+      flipTo('submitted')
     } else if (response.status == 'card_error') {
-      window.scrollTo(0, 0)
-      $('.page').hide()
-      $('#confirmPage').fadeIn(fadeSpeed)
+      flipTo('confirmPage')
       setTimeout( () => {
         alert('Error processing payment: ' + response.message)
       }, fadeSpeed)
@@ -87,31 +85,25 @@ async function submitPayment(token) {
 
 $(document).ready(() => {
   $('#incompatibilityNotice').hide()
-  $('#introPage').fadeIn(fadeSpeed)
+  flipTo("introPage")
 
   $('#completeRegistrationButton').click( () => {
     completed = false
-    window.scrollTo(0, 0)
-    $('.page').hide()
-    $('#competitorInfoPage').fadeIn(fadeSpeed)
+    flipTo('competitorInfoPage')
   })
 
   $('#competitorInfoForm').on('submit', async event => {
     try {
       event.preventDefault()
-      window.scrollTo(0, 0)
-      $('.page').hide()
-      $('#loader').fadeIn(fadeSpeed)
+      flipTo('loader')
       let data = $('form').serializeObject()
       let response = await post("/submit/competitorInfo", data)
-      $('.page').hide()
-      window.scrollTo(0, 0)
       if (response == 'registered') {
-        $('#alreadyRegisteredPage').fadeIn(fadeSpeed)
+        flipTo('alreadyRegisteredPage')
         completed = true
         $('form').trigger('reset')
       } else if (response == 'not registered') {
-        $('#lunchPage').fadeIn(fadeSpeed)
+        flipTo('lunchPage')
       } else {
         throw new Error(response)
       }
@@ -121,22 +113,16 @@ $(document).ready(() => {
   })
 
   $('#competitorInfoBack').click( () => {
-    window.scrollTo(0, 0)
-    $('.page').hide()
-    $('#introPage').fadeIn(fadeSpeed)
+    flipTo('introPage')
   })
 
   $('#lunchForm').on('submit', event => {
     event.preventDefault()
-    window.scrollTo(0, 0)
-    $('.page').hide()
-    $('#tshirtPage').fadeIn(fadeSpeed)
+    flipTo('tshirtPage')
   })
 
   $('#lunchBack').click( () => {
-    window.scrollTo(0, 0)
-    $('.page').hide()
-    $('#competitorInfoPage').fadeIn(fadeSpeed)
+    flipTo('competitorInfoPage')
   })
 
   $('#tshirtForm').on('submit', event => {
@@ -150,9 +136,7 @@ $(document).ready(() => {
     event.preventDefault()
 
     // Load confirm page
-    window.scrollTo(0, 0)
-    $('.page').hide()
-    $('#confirmPage').fadeIn(fadeSpeed)
+    flipTo('confirmPage')
 
     // Competitor info
     $('#nameConfirmation').text(form.name)
@@ -209,22 +193,16 @@ $(document).ready(() => {
   })
 
   $('#tshirtBack').click( () => {
-    window.scrollTo(0, 0)
-    $('.page').hide()
-    $('#lunchPage').fadeIn(fadeSpeed)
+    flipTo('lunchPage')
   })
 
   $('#confirmBack').click( () => {
-    window.scrollTo(0, 0)
-    $('.page').hide()
-    $('#tshirtPage').fadeIn(fadeSpeed)
+    flipTo('tshirtPage')
   })
 
   $('#alreadyRegisteredBack').click( () => {
     completed = false
-    window.scrollTo(0, 0)
-    $('.page').hide()
-    $('#competitorInfoPage').fadeIn(fadeSpeed)
+    flipTo('competitorInfoPage')
   })
 
   $('#stripeCheckout').click( () => {
@@ -242,7 +220,6 @@ $(document).ready(() => {
       email: $('form').serializeObject().email,
       token: submitPayment
     })
-    // submitPayment({token: "test-token"})
   })
 
   $('#noPaymentConfirmButton').click( () => {
