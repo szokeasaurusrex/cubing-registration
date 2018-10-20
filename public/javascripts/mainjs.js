@@ -91,6 +91,7 @@ $(document).ready(() => {
 
   $('#completeRegistrationButton').click( () => {
     completed = false
+    window.scrollTo(0, 0)
     $('.page').hide()
     $('#competitorInfoPage').fadeIn(fadeSpeed)
   })
