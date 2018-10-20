@@ -1,7 +1,7 @@
 'use strict';
 
 const keyPublishable = process.env.PUBLISHABLE_KEY
-const deadline = new Date(Date.UTC(2018, 10, 22, 5))
+const deadline = new Date(Date.UTC(2018, 10, 21, 5))
 
 var express = require('express')
 var router = express.Router()
