@@ -120,6 +120,7 @@ $(document).ready(() => {
   })
 
   $('#competitorInfoBack').click( () => {
+    window.scrollTo(0, 0)
     $('.page').hide()
     $('#introPage').fadeIn(fadeSpeed)
   })
@@ -196,7 +197,6 @@ $(document).ready(() => {
 
     // Total Price
     $('#totalPrice').text(totalPrice)
-    $
     if (totalPrice > 0) {
       $('#paymentSection').show()
       $('#noPaymentConfirmSection').hide()
