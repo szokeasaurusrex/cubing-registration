@@ -121,7 +121,7 @@ block content
     .row
       .col-md-3
       .col-md-6
-        img.img-fluid(src = '/images/tshirt.png', alt = 'T-Shirt Design')
+        img.img-fluid.rounded(src = '/images/tshirt.png', alt = 'T-Shirt Design')
     br
     p.lead
       | If you would like a shirt, you should pre-order it now. Supply of shirts
@@ -170,8 +170,6 @@ block content
           th Quantity
           th Price
       tbody#confirmTableBody  
-    //- .text-center
-    //-   p.lead Your total is $#[span#totalPrice].00
     .card
       .card-body
         h4.card-title Payment
