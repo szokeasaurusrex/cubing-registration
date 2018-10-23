@@ -71,3 +71,6 @@ typings/
 
 # Serverless directories
 .serverless
+
+#tshirt image
+public/images/tshirt.png
