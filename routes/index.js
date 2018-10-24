@@ -1,7 +1,7 @@
 'use strict';
 
 const keyPublishable = process.env.PUBLISHABLE_KEY
-const deadline = new Date(Date.UTC(2018, 10, 21, 5))
+const deadline = new Date(Date.UTC(2018, 10, 21, 6, 59))
 
 var express = require('express')
 var router = express.Router()
@@ -15,8 +15,7 @@ const mongoUrl = "mongodb://localhost:27017/cubing"
 router.get('/', (req, res) => {
   if (new Date() < deadline) {
     let deadlineString = ''
-    const displayDeadline = new Date(deadline.getTime() - 1)
-    deadlineString += displayDeadline.toLocaleString('en-us', {
+    deadlineString += deadline.toLocaleString('en-us', {
       timeZone: 'America/New_York',
       weekday: 'long',
       year: 'numeric',
@@ -24,7 +23,7 @@ router.get('/', (req, res) => {
       day: 'numeric',
     })
     deadlineString += ' at '
-    deadlineString += displayDeadline.toLocaleString('en-us', {
+    deadlineString += deadline.toLocaleString('en-us', {
       timeZone: 'America/New_York',
       hour: 'numeric',
       minute: 'numeric',

@@ -2,7 +2,7 @@
 
 const keyPublishable = process.env.PUBLISHABLE_KEY
 const keySecret = process.env.SECRET_KEY
-const deadline = new Date(Date.UTC(2018, 10, 21, 5))
+const deadline = new Date(Date.UTC(2018, 10, 21, 6, 59))
 
 var express = require('express')
 var router = express.Router()
