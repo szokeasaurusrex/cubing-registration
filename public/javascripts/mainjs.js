@@ -11,7 +11,9 @@ function errorPage (err) {
 }
 
 function flipTo(pageId) {
-  window.scrollTo(0, 0)
+  $('html, body').animate({
+    scrollTop: "0px"
+  }, fadeSpeed)
   $('.page').hide()
   $('#' + pageId).fadeIn(fadeSpeed)
 }
