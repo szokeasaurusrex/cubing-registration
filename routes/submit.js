@@ -32,7 +32,6 @@ router.post('/competitorInfo', async (req, res) => {
   }
 })
 
-// TODO: Add /initiatePayment
 
 router.post('/charge', async (req, res) => {
   try {
