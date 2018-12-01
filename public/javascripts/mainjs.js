@@ -131,7 +131,7 @@ $(document).ready(() => {
     const fullPriceRegistration = 5
     const largeLunchUnitPrice = 5
     const smallLunchUnitPrice = 3
-    const tshirtUnitPrice = 18
+    const tshirtUnitPrice = 25
 
     let totalPrice = 0
     let form = $('form').serializeObject()

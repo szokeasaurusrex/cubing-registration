@@ -62,7 +62,7 @@ router.post('/charge', async (req, res) => {
     totalPrice += 5 * regInfo.largeLunch
     totalPrice += 3 * regInfo.smallLunch
     if (regInfo.tshirt != "-") {
-      totalPrice += 18
+      totalPrice += 25
     }
     if (totalPrice == regInfo.totalPrice) {
       if (totalPrice > 0) {
